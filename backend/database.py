@@ -1,8 +1,17 @@
 import sqlite3
 import os
 import json
+import shutil
 
-DB_FILE = os.path.join(os.path.dirname(__file__), "foodbridge.db")
+# In serverless environments (like Vercel), the root filesystem is read-only.
+# We copy the initial database to /tmp when running under Vercel.
+if os.environ.get("VERCEL"):
+    DB_FILE = "/tmp/foodbridge.db"
+    orig_db = os.path.join(os.path.dirname(__file__), "foodbridge.db")
+    if not os.path.exists(DB_FILE) and os.path.exists(orig_db):
+        shutil.copyfile(orig_db, DB_FILE)
+else:
+    DB_FILE = os.environ.get("DATABASE_FILE", os.path.join(os.path.dirname(__file__), "foodbridge.db"))
 
 def get_db_connection():
     conn = sqlite3.connect(DB_FILE)

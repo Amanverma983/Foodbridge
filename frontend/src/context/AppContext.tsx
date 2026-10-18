@@ -167,7 +167,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Check backend health
   useEffect(() => {
-    fetch('http://localhost:8000/api/health')
+    const apiBase = import.meta.env.VITE_API_URL || '';
+    fetch(`${apiBase}/api/health`)
       .then((res) => {
         if (res.ok) setIsBackendConnected(true);
       })

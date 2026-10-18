@@ -15,7 +15,9 @@ from seed import seed_database
 app = FastAPI(
     title="FoodBridge API — Save Food, Feed People",
     description="Backend service for Noida Food Recovery Network with strict role security and audit logs",
-    version="1.0.0"
+    version="1.0.0",
+    docs_url="/api/docs",
+    openapi_url="/api/openapi.json",
 )
 
 # Enable CORS for Vite frontend
@@ -87,6 +89,17 @@ def startup_event():
     conn.close()
     if count == 0:
         seed_database()
+
+@app.get("/api")
+@app.get("/api/")
+def api_root():
+    return {
+        "service": "FoodBridge API",
+        "version": "1.0.0",
+        "status": "operational",
+        "docs": "/api/docs",
+        "health": "/api/health"
+    }
 
 @app.get("/api/health")
 def health_check():
