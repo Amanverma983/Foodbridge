@@ -9,30 +9,30 @@ export const FoodSafetyBanner: React.FC = () => {
 
   return (
     <>
-      <div className="bg-gradient-to-r from-amber-950/60 via-slate-900 to-emerald-950/60 border-y border-amber-600/30 px-4 py-2.5">
+      <div className="bg-slate-950/80 backdrop-blur-md border-b border-amber-500/20 px-4 py-2 transition-all">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
-            <span className="p-1 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
-              <ShieldAlert className="w-4 h-4" />
+            <span className="p-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 shrink-0">
+              <ShieldAlert className="w-3.5 h-3.5" />
             </span>
-            <p className="text-slate-200">
-              <strong className="text-amber-300 font-semibold">Strict Food Safety Protocol: </strong>
-              Per FSSAI regulations, donations must be prepared under hygienic standards and temperature-monitored.
-              <span className="text-slate-400 ml-1 hidden sm:inline">
-                We never rely on automated predictions for safety; strict human verification and safe temperature handling are mandatory.
+            <p className="text-slate-200 text-xs">
+              <strong className="text-amber-300 font-semibold font-display">FSSAI Safety Protocol: </strong>
+              Strict human hygiene verification and cold/hot temperature monitoring are enforced on all donations.
+              <span className="text-slate-400 ml-1.5 hidden md:inline">
+                Automated AI edibility guessing is strictly prohibited.
               </span>
             </p>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => setShowModal(true)}
-              className="text-emerald-400 hover:text-emerald-300 underline font-medium"
+              className="text-emerald-400 hover:text-emerald-300 font-semibold hover:underline cursor-pointer"
             >
-              View Guidelines
+              View Compliance Guidelines &rarr;
             </button>
             <button
               onClick={() => setDismissed(true)}
-              className="p-1 text-slate-400 hover:text-slate-200 rounded"
+              className="p-1 text-slate-400 hover:text-slate-200 rounded-lg hover:bg-slate-800 transition cursor-pointer"
               aria-label="Dismiss banner"
             >
               <X className="w-3.5 h-3.5" />

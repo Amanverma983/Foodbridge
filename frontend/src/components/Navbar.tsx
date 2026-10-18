@@ -36,6 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     currentUser,
     switchRole,
     isDemoMode,
+    isBackendConnected,
     unreadCount,
     markAllNotificationsAsRead,
     notifications,
@@ -54,15 +55,18 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-emerald-900/40 text-slate-100 shadow-lg shadow-black/20">
+    <header className="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-xl border-b border-slate-800/80 text-slate-100 shadow-xl shadow-black/40 transition-all">
       {/* Top Demo Bar Banner */}
-      <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 px-4 py-1.5 text-xs border-b border-emerald-800/30 flex items-center justify-between text-slate-300">
+      <div className="bg-gradient-to-r from-emerald-950/80 via-slate-950 to-emerald-950/80 px-4 py-1.5 text-xs border-b border-emerald-900/30 flex items-center justify-between text-slate-300">
         <div className="flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="font-medium text-emerald-300">FoodBridge Noida</span>
-          <span className="hidden sm:inline text-slate-400">| Demo Mode: Local Persistence Enabled</span>
-          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-            FSSAI Standards Ready
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span className="font-semibold text-emerald-300">FoodBridge NCR</span>
+          <span className="hidden sm:inline text-slate-400">&bull; Noida & Greater Noida Food Recovery</span>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+            FSSAI Verified
           </span>
         </div>
         <div className="flex items-center gap-3">
@@ -72,17 +76,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                 resetDemoData();
               }
             }}
-            className="text-[11px] text-slate-400 hover:text-emerald-300 flex items-center gap-1 transition"
+            className="text-[11px] text-slate-400 hover:text-emerald-300 flex items-center gap-1.5 px-2 py-0.5 rounded hover:bg-slate-800/60 transition"
             title="Reset Seed Data"
           >
-            <RefreshCw className="w-3 h-3" />
-            <span className="hidden md:inline">Reset Noida Demo Data</span>
+            <RefreshCw className="w-3 h-3 text-slate-400 hover:rotate-180 transition-transform duration-500" />
+            <span className="hidden md:inline">Reset Demo Data</span>
           </button>
-          <div className="h-3 w-px bg-slate-700 hidden sm:block" />
-          <div className="flex items-center gap-1 text-[11px] text-slate-400">
-            <Database className="w-3 h-3 text-emerald-400" />
-            <span className="hidden sm:inline">Backend:</span>
-            <span className="text-emerald-300">FastAPI & SQLite / Demo Active</span>
+          <div className="h-3 w-px bg-slate-800 hidden sm:block" />
+          <div className="flex items-center gap-1.5 text-[11px]">
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+              isBackendConnected
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+            }`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${isBackendConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+              {isBackendConnected ? 'FastAPI Online' : 'Local Demo Mode'}
+            </span>
           </div>
         </div>
       </div>
@@ -94,97 +103,49 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setActiveTab('landing')}
             className="flex items-center gap-3 cursor-pointer group select-none"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-teal-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:scale-105 group-hover:shadow-emerald-500/40 transition-all duration-300 border border-emerald-300/30">
               <UtensilsCrossed className="w-5 h-5 text-slate-950 stroke-[2.5]" />
             </div>
             <div>
-              <span className="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
-                Food<span className="text-emerald-400">Bridge</span>
+              <span className="text-xl font-black tracking-tight text-white flex items-center gap-1 font-display">
+                Food<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Bridge</span>
               </span>
-              <span className="block text-[10px] tracking-wider text-emerald-300/80 uppercase font-semibold -mt-1">
-                Save Food, Feed People
+              <span className="block text-[10px] tracking-widest text-emerald-400/90 uppercase font-bold -mt-1">
+                Save Food &bull; Feed People
               </span>
             </div>
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1">
-            <button
-              onClick={() => setActiveTab('landing')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-                activeTab === 'landing'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              Home
-            </button>
-            <button
-              onClick={() => setActiveTab('browse')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1.5 ${
-                activeTab === 'browse'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <HeartHandshake className="w-4 h-4" />
-              Browse Surplus
-            </button>
-            <button
-              onClick={() => setActiveTab('map')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1.5 ${
-                activeTab === 'map'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <MapPin className="w-4 h-4" />
-              Noida Map
-            </button>
-            <button
-              onClick={() => setActiveTab('post')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1.5 ${
-                activeTab === 'post'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <PlusCircle className="w-4 h-4 text-emerald-400" />
-              Post Donation
-            </button>
-            <button
-              onClick={() => setActiveTab('deliveries')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1.5 ${
-                activeTab === 'deliveries'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <Truck className="w-4 h-4" />
-              Deliveries
-            </button>
-            <button
-              onClick={() => setActiveTab('analytics')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1.5 ${
-                activeTab === 'analytics'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <BarChart3 className="w-4 h-4" />
-              Impact
-            </button>
-            <button
-              onClick={() => setActiveTab('admin')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1.5 ${
-                activeTab === 'admin'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Admin
-            </button>
+          <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-md">
+            {[
+              { id: 'landing', label: 'Home' },
+              { id: 'browse', label: 'Browse Meals', icon: HeartHandshake },
+              { id: 'map', label: 'Live Map', icon: MapPin },
+              { id: 'post', label: 'Donate', icon: PlusCircle },
+              { id: 'deliveries', label: 'Dispatch', icon: Truck },
+              { id: 'analytics', label: 'Impact', icon: BarChart3 },
+              { id: 'admin', label: 'Governance', icon: ShieldCheck },
+            ].map(({ id, label, icon: Icon }) => {
+              const isActive = activeTab === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 relative ${
+                    isActive
+                      ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/15 text-emerald-300 border border-emerald-500/35 shadow-[0_0_15px_-3px_rgba(16,185,129,0.35)] font-bold'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                  }`}
+                >
+                  {Icon && <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-400' : 'text-slate-400'}`} />}
+                  <span>{label}</span>
+                  {isActive && (
+                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-emerald-400 rounded-full" />
+                  )}
+                </button>
+              );
+            })}
           </nav>
 
           {/* Right Action Icons & Role Switcher */}
